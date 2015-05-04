@@ -4,19 +4,23 @@ package androidhive.info.materialdesign.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTabHost;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidhive.info.materialdesign.R;
-import androidhive.info.materialdesign.tabs.Tab1;
-import androidhive.info.materialdesign.tabs.Tab2;
+import androidhive.info.materialdesign.tabs.SlidingTabLayout;
+import androidhive.info.materialdesign.tabs.ViewPagerAdapter;
 
 
 public class HomeFragment extends Fragment {
 
-    private FragmentTabHost mTabHost;
+    ViewPager pager;
+    ViewPagerAdapter adapter;
+    SlidingTabLayout tabs;
+    CharSequence Titles[]={"Home","Events"};
+    int numOfTabs =2;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -31,18 +35,28 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // set up tab
-        mTabHost = (FragmentTabHost)rootView.findViewById(android.R.id.tabhost);
-        mTabHost.setup(getActivity(), getChildFragmentManager(), R.id.realtabcontent);
+        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
+        adapter =  new ViewPagerAdapter(getActivity().getSupportFragmentManager(),Titles, numOfTabs);
+        pager = (ViewPager) rootView.findViewById(R.id.pager);
+        pager.setAdapter(adapter);
+        // Assigning the Sliding Tab Layout View
+        tabs = (SlidingTabLayout) rootView.findViewById(R.id.tabs);
+        tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
 
-        mTabHost.addTab(mTabHost.newTabSpec("fragmentb").setIndicator("Fragment B"),
-                Tab1.class, null);
-        mTabHost.addTab(mTabHost.newTabSpec("fragmentc").setIndicator("Fragment C"),
-                Tab2.class, null);
+        // Setting Custom Color for the Scroll bar indicator of the Tab View
+        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(R.color.tabsScrollColor);
+            }
+        });
 
-        // Inflate the layout for this fragment
+        // Setting the ViewPager For the SlidingTabsLayout
+        tabs.setViewPager(pager);
+
         return rootView;
     }
 

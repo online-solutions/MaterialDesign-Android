@@ -27,14 +27,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
 
-//    Toolbar toolbar;
-    ViewPager pager;
-    ViewPagerAdapter adapter;
-    SlidingTabLayout tabs;
-    CharSequence Titles[]={"Home","Events"};
-    int Numboftabs =2;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,31 +44,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         // display the first navigation drawer view on app launch
         displayView(0);
-
-
-
-//        toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-//        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs);
-//
-//        pager = (ViewPager) findViewById(R.id.pager);
-//        pager.setAdapter(adapter);
-//        // Assigning the Sliding Tab Layout View
-//        tabs = (SlidingTabLayout) findViewById(R.id.tabs);
-//        tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
-//
-//        // Setting Custom Color for the Scroll bar indicator of the Tab View
-//        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-//            @Override
-//            public int getIndicatorColor(int position) {
-//                return getResources().getColor(R.color.tabsScrollColor);
-//            }
-//        });
-//
-//        // Setting the ViewPager For the SlidingTabsLayout
-//        tabs.setViewPager(pager);
-
 
     }
 
