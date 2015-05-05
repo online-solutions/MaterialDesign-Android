@@ -1,4 +1,4 @@
-package plus.studio.mvideo.activity;
+package plus.studio.mvideo.activities;
 
 
 import android.os.Bundle;
@@ -13,14 +13,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import plus.studio.mvideo.R;
+import plus.studio.mvideo.fragments.DrawerFragment;
+import plus.studio.mvideo.fragments.FriendsFragment;
+import plus.studio.mvideo.fragments.HomeFragment;
+import plus.studio.mvideo.fragments.MessagesFragment;
 
 
-public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener {
-
-    private static String TAG = MainActivity.class.getSimpleName();
+public class MainActivity extends ActionBarActivity implements DrawerFragment.FragmentDrawerListener {
 
     private Toolbar mToolbar;
-    private FragmentDrawer drawerFragment;
+
+    private DrawerFragment drawerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +35,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        drawerFragment = (FragmentDrawer)
+        drawerFragment = (DrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);

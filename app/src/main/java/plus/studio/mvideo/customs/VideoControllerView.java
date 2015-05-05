@@ -1,4 +1,4 @@
-package plus.studio.mvideo.custom;
+package plus.studio.mvideo.customs;
 
 /*
  * Copyright (C) 2006 The Android Open Source Project

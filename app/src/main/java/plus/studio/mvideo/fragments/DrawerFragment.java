@@ -1,4 +1,4 @@
-package plus.studio.mvideo.activity;
+package plus.studio.mvideo.fragments;
 
 
 import android.content.Context;
@@ -19,13 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import plus.studio.mvideo.R;
-import plus.studio.mvideo.adapter.NavigationDrawerAdapter;
-import plus.studio.mvideo.model.NavDrawerItem;
+import plus.studio.mvideo.adapters.NavigationDrawerAdapter;
+import plus.studio.mvideo.models.NavDrawerItem;
 
 
-public class FragmentDrawer extends Fragment {
-
-    private static String TAG = FragmentDrawer.class.getSimpleName();
+public class DrawerFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -35,8 +33,7 @@ public class FragmentDrawer extends Fragment {
     private static String[] titles = null;
     private FragmentDrawerListener drawerListener;
 
-    public FragmentDrawer() {
-
+    public DrawerFragment() {
     }
 
     public void setDrawerListener(FragmentDrawerListener listener) {
@@ -45,7 +42,6 @@ public class FragmentDrawer extends Fragment {
 
     public static List<NavDrawerItem> getData() {
         List<NavDrawerItem> data = new ArrayList<>();
-
 
         // preparing navigation drawer items
         for (int i = 0; i < titles.length; i++) {

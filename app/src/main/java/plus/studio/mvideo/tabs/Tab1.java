@@ -18,7 +18,7 @@ import android.widget.FrameLayout;
 import java.io.IOException;
 
 import plus.studio.mvideo.R;
-import plus.studio.mvideo.custom.VideoControllerView;
+import plus.studio.mvideo.customs.VideoControllerView;
 
 /**
  * Created by yohananjr13 on 5/3/2015.

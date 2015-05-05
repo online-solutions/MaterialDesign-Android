@@ -1,4 +1,4 @@
-package plus.studio.mvideo.model;
+package plus.studio.mvideo.models;
 
 
 public class NavDrawerItem {

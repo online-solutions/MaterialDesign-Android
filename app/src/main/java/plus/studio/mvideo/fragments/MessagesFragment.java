@@ -1,4 +1,4 @@
-package plus.studio.mvideo.activity;
+package plus.studio.mvideo.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

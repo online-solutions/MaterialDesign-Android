@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme" >
         <activity
-            android:name="plus.studio.mvideo.activity.MainActivity"
+            android:name="plus.studio.mvideo.activities.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

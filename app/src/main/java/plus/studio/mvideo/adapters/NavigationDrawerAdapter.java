@@ -1,4 +1,4 @@
-package plus.studio.mvideo.adapter;
+package plus.studio.mvideo.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 import plus.studio.mvideo.R;
-import plus.studio.mvideo.model.NavDrawerItem;
+import plus.studio.mvideo.models.NavDrawerItem;
 
 
 /**
