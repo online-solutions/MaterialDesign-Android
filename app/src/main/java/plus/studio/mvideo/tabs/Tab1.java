@@ -1,5 +1,6 @@
 package plus.studio.mvideo.tabs;
 
+import android.graphics.Point;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -30,12 +31,14 @@ public class Tab1 extends Fragment implements SurfaceHolder.Callback, MediaPlaye
     MediaPlayer player;
     VideoControllerView controller;
     View v;
+
     String internetUrl = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
     String localUrl = "android.resource://plus.studio.mvideo/raw/big_buck_bunny";
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
-       v = inflater.inflate(R.layout.tab_1, container, false);
+
+        v = inflater.inflate(R.layout.tab_1, container, false);
         videoSurface = (SurfaceView) v.findViewById(R.id.videoSurface);
         SurfaceHolder videoHolder = videoSurface.getHolder();
         videoHolder.addCallback(this);
@@ -93,6 +96,29 @@ public class Tab1 extends Fragment implements SurfaceHolder.Callback, MediaPlaye
     public void onPrepared(MediaPlayer mp) {
         controller.setMediaPlayer(this);
         controller.setAnchorView((FrameLayout) v.findViewById(R.id.videoSurfaceContainer));
+
+        //Get the dimensions of the video
+        int videoWidth = mp.getVideoWidth();
+        int videoHeight = mp.getVideoHeight();
+
+        //Get the width of the screen
+        Point point = new Point();
+        getActivity().getWindowManager().getDefaultDisplay().getSize(point);
+        int screenWidth = point.x;
+
+        //Get the SurfaceView layout parameters
+        android.view.ViewGroup.LayoutParams lp = videoSurface.getLayoutParams();
+
+        //Set the width of the SurfaceView to the width of the screen
+        lp.width = screenWidth;
+
+        //Set the height of the SurfaceView to match the aspect ratio of the video
+        //be sure to cast these as floats otherwise the calculation will likely be 0
+        lp.height = (int) (((float)videoHeight / (float)videoWidth) * (float)screenWidth);
+
+        //Commit the layout parameters
+        videoSurface.setLayoutParams(lp);
+
         player.start();
     }
 // End MediaPlayer.OnPreparedListener
