@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import plus.studio.mvideo.R;
-import plus.studio.mvideo.tabs.SlidingTabLayout;
-import plus.studio.mvideo.tabs.ViewPagerAdapter;
+import plus.studio.mvideo.customs.SlidingTabLayout;
+import plus.studio.mvideo.adapters.ViewPagerAdapter;
 
 
 public class HomeFragment extends Fragment {

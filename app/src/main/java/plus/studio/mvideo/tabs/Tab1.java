@@ -1,189 +1,103 @@
 package plus.studio.mvideo.tabs;
 
-import android.graphics.Point;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.net.Uri;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.ListView;
 
-import java.io.IOException;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import plus.studio.mvideo.R;
-import plus.studio.mvideo.customs.VideoControllerView;
+import plus.studio.mvideo.adapters.CustomListAdapter;
+import plus.studio.mvideo.logging.L;
+import plus.studio.mvideo.models.Movie;
+import plus.studio.mvideo.utils.AppController;
 
 /**
  * Created by yohananjr13 on 5/3/2015.
  */
 
+public class Tab1 extends Fragment {
 
-public class Tab1 extends Fragment implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, VideoControllerView.MediaPlayerControl{
-
-    SurfaceView videoSurface;
-    MediaPlayer player;
-    VideoControllerView controller;
-    View v;
-
-    String internetUrl = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-    String localUrl = "android.resource://plus.studio.mvideo/raw/big_buck_bunny";
+    // Movies json url
+    private static final String url = "http://mvideo.herokuapp.com/movies";
+    private ProgressDialog pDialog;
+    private List<Movie> movieList = new ArrayList<>();
+    private ListView listView;
+    private CustomListAdapter adapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.tab_1, container, false);
 
-        v = inflater.inflate(R.layout.tab_1, container, false);
-        videoSurface = (SurfaceView) v.findViewById(R.id.videoSurface);
-        SurfaceHolder videoHolder = videoSurface.getHolder();
-        videoHolder.addCallback(this);
+        listView = (ListView) v.findViewById(R.id.list);
+        adapter = new CustomListAdapter(getActivity(), movieList);
 
-        player = new MediaPlayer();
-        controller = new VideoControllerView(getActivity());
+        pDialog = new ProgressDialog(getActivity());
+        pDialog.setMessage("Loading...");
+        pDialog.show();
 
-        try {
-            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            player.setDataSource(getActivity(), Uri.parse(localUrl));
-            player.setOnPreparedListener(this);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        v.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-
-                if(event.getAction() == MotionEvent.ACTION_MOVE){
-                    controller.show();
-                }
-                return true;
+        // Creating volley request obj
+        JsonArrayRequest AppReq = new JsonArrayRequest(url,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        L.d(response.toString());
+                        hidePDialog();
+                        // Parsing json
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject obj = response.getJSONObject(i);
+                                Movie movie = new Movie();
+                                movie.setTitle(obj.getString("name"));
+                                movie.setThumbnailUrl(obj.getString("icon"));
+                                movie.setRating(obj.getDouble("rating"));
+                                movie.setDuration(obj.getString("duration"));
+                                movie.setYear(obj.getInt("release"));
+                                movieList.add(movie);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        // notifying list adapter about data changes
+                        // so that it renders the list view with updated data
+                        adapter.notifyDataSetChanged();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                L.d(error.toString() + "");
+//                VolleyLog.d(L.TAG, "Error: " + error.getMessage());
+                hidePDialog();
             }
         });
+
+        listView.setAdapter(adapter);
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(AppReq);
 
         return v;
     }
 
-    // Implement SurfaceHolder.Callback
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
+    private void hidePDialog() {
+        if (pDialog != null) {
+            pDialog.dismiss();
+            pDialog = null;
+        }
     }
-
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        player.setDisplay(holder);
-        player.prepareAsync();
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-
-    }
-// End SurfaceHolder.Callback
-
-    // Implement MediaPlayer.OnPreparedListener
-    @Override
-    public void onPrepared(MediaPlayer mp) {
-        controller.setMediaPlayer(this);
-        controller.setAnchorView((FrameLayout) v.findViewById(R.id.videoSurfaceContainer));
-
-        //Get the dimensions of the video
-        int videoWidth = mp.getVideoWidth();
-        int videoHeight = mp.getVideoHeight();
-
-        //Get the width of the screen
-        Point point = new Point();
-        getActivity().getWindowManager().getDefaultDisplay().getSize(point);
-        int screenWidth = point.x;
-
-        //Get the SurfaceView layout parameters
-        android.view.ViewGroup.LayoutParams lp = videoSurface.getLayoutParams();
-
-        //Set the width of the SurfaceView to the width of the screen
-        lp.width = screenWidth;
-
-        //Set the height of the SurfaceView to match the aspect ratio of the video
-        //be sure to cast these as floats otherwise the calculation will likely be 0
-        lp.height = (int) (((float)videoHeight / (float)videoWidth) * (float)screenWidth);
-
-        //Commit the layout parameters
-        videoSurface.setLayoutParams(lp);
-
-        player.start();
-    }
-// End MediaPlayer.OnPreparedListener
-
-    // Implement VideoMediaController.MediaPlayerControl
-    @Override
-    public boolean canPause() {
-        return true;
-    }
-
-    @Override
-    public boolean canSeekBackward() {
-        return true;
-    }
-
-    @Override
-    public boolean canSeekForward() {
-        return true;
-    }
-
-    @Override
-    public int getBufferPercentage() {
-        return 0;
-    }
-
-    @Override
-    public int getCurrentPosition() {
-        return player.getCurrentPosition();
-    }
-
-    @Override
-    public int getDuration() {
-        return player.getDuration();
-    }
-
-    @Override
-    public boolean isPlaying() {
-        return player.isPlaying();
-    }
-
-    @Override
-    public void pause() {
-        player.pause();
-    }
-
-    @Override
-    public void seekTo(int i) {
-        player.seekTo(i);
-    }
-
-    @Override
-    public void start() {
-        player.start();
-    }
-
-    @Override
-    public boolean isFullScreen() {
-        return false;
-    }
-
-    @Override
-    public void toggleFullScreen() {
-
-    }
-// End VideoMediaController.MediaPlayerControl
-
 
 }

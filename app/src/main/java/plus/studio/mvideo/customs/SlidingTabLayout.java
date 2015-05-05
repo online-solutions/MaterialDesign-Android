@@ -1,4 +1,4 @@
-package plus.studio.mvideo.tabs;
+package plus.studio.mvideo.customs;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.view.PagerAdapter;

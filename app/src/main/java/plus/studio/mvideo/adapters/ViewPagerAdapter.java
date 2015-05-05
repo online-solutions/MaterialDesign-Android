@@ -1,8 +1,11 @@
-package plus.studio.mvideo.tabs;
+package plus.studio.mvideo.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import plus.studio.mvideo.tabs.Tab1;
+import plus.studio.mvideo.tabs.Tab2;
 
 /**
  * Created by yohananjr13 on 5/3/2015.

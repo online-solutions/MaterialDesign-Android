@@ -25,6 +25,10 @@
     <string name="tab_notifications">Notifications</string>
     <string name="tab_photos">Photos</string>
     <string name="description">Media Controls</string>
+    <string name="title_activity_video_detail">VideoDetailActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_video_full_screen">VideoFullScreenActivity</string>
 
 
 </resources>

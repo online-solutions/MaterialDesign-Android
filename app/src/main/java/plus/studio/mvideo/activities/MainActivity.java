@@ -1,6 +1,5 @@
 package plus.studio.mvideo.activities;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,11 +17,9 @@ import plus.studio.mvideo.fragments.FriendsFragment;
 import plus.studio.mvideo.fragments.HomeFragment;
 import plus.studio.mvideo.fragments.MessagesFragment;
 
-
 public class MainActivity extends ActionBarActivity implements DrawerFragment.FragmentDrawerListener {
 
     private Toolbar mToolbar;
-
     private DrawerFragment drawerFragment;
 
     @Override
@@ -42,9 +39,7 @@ public class MainActivity extends ActionBarActivity implements DrawerFragment.Fr
 
         // display the first navigation drawer view on app launch
         displayView(0);
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -104,7 +99,6 @@ public class MainActivity extends ActionBarActivity implements DrawerFragment.Fr
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment);
             fragmentTransaction.commit();
-
 
             // set the toolbar title
             getSupportActionBar().setTitle(title);

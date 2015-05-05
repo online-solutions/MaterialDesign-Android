@@ -1,4 +1,4 @@
-package plus.studio.mvideo.tabs;
+package plus.studio.mvideo.customs;
 
 /**
  * Created by yohananjr13 on 5/3/2015.
