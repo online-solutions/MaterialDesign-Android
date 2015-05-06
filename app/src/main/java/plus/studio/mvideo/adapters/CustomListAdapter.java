@@ -115,6 +115,7 @@ public class CustomListAdapter extends BaseAdapter {
             public void onClick(View v) {
 
                 PopupMenu popupMenu = new PopupMenu(activity, v);
+                popupMenu.inflate(R.menu.menu_list_item);
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -133,7 +134,7 @@ public class CustomListAdapter extends BaseAdapter {
                         return false;
                     }
                 });
-                popupMenu.inflate(R.menu.menu_list_item);
+
                 popupMenu.show();
 
 

@@ -79,6 +79,7 @@ public class Tab1 extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                L.t(getActivity(), "Can not connect to server, plz check your network connection and refresh");
                 L.d(error.toString() + "");
 //                VolleyLog.d(L.TAG, "Error: " + error.getMessage());
                 hidePDialog();

@@ -6,6 +6,8 @@
 
     <TextView
         android:id="@+id/title"
+        android:text="HOME"
+        android:textColor="@color/textColorPrimary"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="30dp"
