@@ -17,7 +17,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#CC000000"
+    android:id="@+id/media_controller"
+    android:background="#50000000"
     android:orientation="vertical">
 
     <LinearLayout
@@ -86,7 +87,7 @@
             android:paddingTop="4dip"
             android:paddingBottom="4dip"
             android:paddingLeft="10dip"
-            android:paddingRight="4dip"
+            android:paddingRight="45dip"
             android:layout_gravity="top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

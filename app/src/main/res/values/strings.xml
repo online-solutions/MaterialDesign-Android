@@ -29,6 +29,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_video_full_screen">VideoFullScreenActivity</string>
+    <string name="movie_description">Description:</string>
 
 
 </resources>

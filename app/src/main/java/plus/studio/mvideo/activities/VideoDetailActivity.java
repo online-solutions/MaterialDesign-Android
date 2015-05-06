@@ -1,5 +1,6 @@
 package plus.studio.mvideo.activities;
 
+import android.content.Intent;
 import android.graphics.Point;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -12,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -29,6 +31,7 @@ public class VideoDetailActivity extends ActionBarActivity implements SurfaceHol
 
     String internetUrl = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
     String localUrl = "android.resource://plus.studio.mvideo/raw/big_buck_bunny";
+    private boolean hasActiveHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,9 +106,14 @@ public class VideoDetailActivity extends ActionBarActivity implements SurfaceHol
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        player.setDisplay(holder);
+        synchronized (this) {
+            hasActiveHolder = true;
+            this.notifyAll();
+        }
+
         if(!player.isPlaying()){
             player.prepareAsync();
+            player.setDisplay(holder);
         } else {
             finish();
         }
@@ -120,8 +128,15 @@ public class VideoDetailActivity extends ActionBarActivity implements SurfaceHol
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        synchronized (this) {
+            hasActiveHolder = false;
 
+            synchronized(this)          {
+                this.notifyAll();
+            }
+        }
     }
+
     // End SurfaceHolder.Callback
 
     // Implement MediaPlayer.OnPreparedListener
@@ -214,7 +229,22 @@ public class VideoDetailActivity extends ActionBarActivity implements SurfaceHol
 
     @Override
     public void toggleFullScreen() {
-
+//        player.pause();
+        Intent intent = new Intent(this, VideoFullScreenActivity.class);
+        // TODO: change movieId here
+        intent.putExtra("movieId", 100);
+        startActivity(intent);
+//        L.t(getApplicationContext(), "fullscreen");
+//        WindowManager.LayoutParams attrs = getWindow().getAttributes();
+//        if (!isFullScreen())
+//        {
+//            attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+//        }
+//        else
+//        {
+//            attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
+//        }
+//        getWindow().setAttributes(attrs);
     }
     // End VideoMediaController.MediaPlayerControl
 
