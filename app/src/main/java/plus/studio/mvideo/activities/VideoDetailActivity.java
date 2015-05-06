@@ -29,7 +29,8 @@ public class VideoDetailActivity extends ActionBarActivity implements SurfaceHol
     private MediaPlayer player;
     private VideoControllerView controller;
 
-    String internetUrl = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+//    String internetUrl = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+    String internetUrl = "http://mvideo.herokuapp.com/raw/big_buck_bunny.mp4";
     String localUrl = "android.resource://plus.studio.mvideo/raw/big_buck_bunny";
     private boolean hasActiveHolder;
 
@@ -47,7 +48,7 @@ public class VideoDetailActivity extends ActionBarActivity implements SurfaceHol
 
         try {
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            player.setDataSource(this, Uri.parse(localUrl));
+            player.setDataSource(this, Uri.parse(internetUrl));
             player.setOnPreparedListener(this);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
