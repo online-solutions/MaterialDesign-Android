@@ -83,11 +83,10 @@
             android:paddingLeft="4dip" />
         
         <ImageButton android:id="@+id/fullscreen"
-            android:layout_marginTop="-7dp"
-            android:paddingTop="4dip"
+            android:paddingTop="5dip"
             android:paddingBottom="4dip"
             android:paddingLeft="10dip"
-            android:paddingRight="45dip"
+            android:paddingRight="10dip"
             android:layout_gravity="top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -454,6 +454,7 @@ public class VideoControllerView extends FrameLayout {
 
         if (mPlayer.isFullScreen()) {
             mFullscreenButton.setImageResource(R.drawable.ic_media_fullscreen_shrink);
+            mFullscreenButton.setPadding(10, 0, 150, 4);
         } else {
             mFullscreenButton.setImageResource(R.drawable.ic_media_fullscreen_stretch);
         }

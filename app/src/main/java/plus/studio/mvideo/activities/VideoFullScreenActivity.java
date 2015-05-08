@@ -1,24 +1,22 @@
 package plus.studio.mvideo.activities;
 
-import android.content.Intent;
-import android.graphics.Point;
+import android.app.ActionBar;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.webkit.WebView;
+import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import java.io.IOException;
@@ -27,24 +25,27 @@ import plus.studio.mvideo.R;
 import plus.studio.mvideo.customs.VideoControllerView;
 import plus.studio.mvideo.logging.L;
 
-public class VideoFullScreenActivity extends ActionBarActivity  implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, VideoControllerView.MediaPlayerControl {
+public class VideoFullScreenActivity extends ActionBarActivity implements SurfaceHolder.Callback,
+        MediaPlayer.OnPreparedListener, VideoControllerView.MediaPlayerControl {
     private SurfaceView videoSurface;
     private MediaPlayer player;
     private VideoControllerView controller;
+    int navigationButtonFlag = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+    int normalButtonFlag = 0;
 
     String internetUrl = "http://mvideo.herokuapp.com/raw/big_buck_bunny.mp4";
     String localUrl = "android.resource://plus.studio.mvideo/raw/big_buck_bunny";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_full_screen);
 
-
-
-
-
+        setFullScreen();
 
         videoSurface = (SurfaceView) findViewById(R.id.videoSurface);
         SurfaceHolder videoHolder = videoSurface.getHolder();
@@ -52,8 +53,6 @@ public class VideoFullScreenActivity extends ActionBarActivity  implements Surfa
 
         player = new MediaPlayer();
         controller = new VideoControllerView(this);
-
-
 
         try {
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -76,7 +75,7 @@ public class VideoFullScreenActivity extends ActionBarActivity  implements Surfa
                 if (controller.isShowing()) {
                     L.d("hide");
                     controller.hide();
-                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                    setFullScreen();
                 } else {
                     L.d("show");
                     controller.show();
@@ -84,7 +83,6 @@ public class VideoFullScreenActivity extends ActionBarActivity  implements Surfa
             }
         });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -117,7 +115,7 @@ public class VideoFullScreenActivity extends ActionBarActivity  implements Surfa
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         player.setDisplay(holder);
-        if(!player.isPlaying()){
+        if (!player.isPlaying()) {
             player.prepareAsync();
         } else {
             finish();
@@ -126,7 +124,6 @@ public class VideoFullScreenActivity extends ActionBarActivity  implements Surfa
         // TODO: When start activity, this method will be call
         // When press back to previous activity, this method will be call too, i don't know why
         // I make an else for this, it's bad idea, fix late
-
 
         L.d("surfaceCreated");
     }
@@ -149,9 +146,9 @@ public class VideoFullScreenActivity extends ActionBarActivity  implements Surfa
 
         //Get the width of the screen
         DisplayMetrics point = new DisplayMetrics();
-        if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 17){
+        if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 17) {
             getWindowManager().getDefaultDisplay().getMetrics(point);
-        } else if(Build.VERSION.SDK_INT >= 17){
+        } else if (Build.VERSION.SDK_INT >= 17) {
             getWindowManager().getDefaultDisplay().getRealMetrics(point);
         }
 
@@ -164,10 +161,10 @@ public class VideoFullScreenActivity extends ActionBarActivity  implements Surfa
         lp.width = screenWidth;
 
         // set media controller width
-//        LinearLayout layout = (LinearLayout) controller.findViewById(R.id.media_controller);
-//        layout.getLayoutParams().width = screenWidth;
+        LinearLayout layout = (LinearLayout) controller.findViewById(R.id.media_controller);
+        layout.getLayoutParams().width = screenWidth;
 
-                //Set the height of the SurfaceView to match the aspect ratio of the video
+        //Set the height of the SurfaceView to match the aspect ratio of the video
         //be sure to cast these as floats otherwise the calculation will likely be 0
         lp.height = (int) (((float) videoHeight / (float) videoWidth) * (float) screenWidth);
 
@@ -237,20 +234,19 @@ public class VideoFullScreenActivity extends ActionBarActivity  implements Surfa
     @Override
     public void toggleFullScreen() {
         finish();
-//        L.t(getApplicationContext(), "fullscreen");
-//        WindowManager.LayoutParams attrs = getWindow().getAttributes();
-//        if (!isFullScreen())
-//        {
-//            attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
-//        }
-//        else
-//        {
-//            attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
-//        }
-//        getWindow().setAttributes(attrs);
     }
     // End VideoMediaController.MediaPlayerControl
 
-
+    private void setFullScreen() {
+        if (ViewConfiguration.get(getApplicationContext()).hasPermanentMenuKey()) {
+            L.d("not has softkey");
+            getWindow().getDecorView().setFitsSystemWindows(false);
+            getWindow().getDecorView().setSystemUiVisibility(normalButtonFlag);
+        } else {
+            L.d("has softkey");
+            getWindow().getDecorView().setFitsSystemWindows(true);
+            getWindow().getDecorView().setSystemUiVisibility(navigationButtonFlag);
+        }
+    }
 }
 
